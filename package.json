@@ -1,0 +1,45 @@
+{
+  "name": "@keepchill/node-sdk",
+  "version": "0.1.0",
+  "description": "Official TypeScript / JavaScript SDK for the KeepChill watermark API.",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "gen/src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "generate": "../scripts/generate-sdks.sh node",
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "keepchill",
+    "watermark",
+    "sdk",
+    "api"
+  ],
+  "author": "KeepChill",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
