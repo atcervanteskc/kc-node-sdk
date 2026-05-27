@@ -1,7 +1,7 @@
 {
   "name": "@keepchill/node-sdk",
   "version": "0.1.0",
-  "description": "Official TypeScript / JavaScript SDK for the KeepChill watermark API.",
+  "description": "Official Node.js SDK for the KeepChill watermark API.",
   "type": "module",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -24,7 +24,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run lint && npm run test:coverage && npm run build"
   },
   "keywords": [
     "keepchill",
@@ -32,8 +33,20 @@
     "sdk",
     "api"
   ],
-  "author": "KeepChill",
-  "license": "UNLICENSED",
+  "author": "KeepChill <support@keepchill.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atcervanteskc/kc-node-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atcervanteskc/kc-node-sdk/issues"
+  },
+  "homepage": "https://keepchill.io",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "engines": {
     "node": ">=18"
   },
