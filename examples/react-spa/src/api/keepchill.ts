@@ -246,8 +246,38 @@ export async function uploadToGcs(uploadUrl: string, file: File): Promise<void> 
 // release, this whole block reduces to `client.jobs.getJob({ jobId })`.
 
 /**
+ * Map the API's file.status enum onto the example's internal JobResult.status.
+ * The polling endpoint uses {pending, processing, completed, failed}; this
+ * example uses {pending, processing, success, error} because the rest of the
+ * UI was written that way. Translate at the boundary instead of churning the
+ * UI internals.
+ */
+function mapApiStatus(s: string): JobResult["status"] {
+  switch (s) {
+    case "pending":
+      return "pending";
+    case "processing":
+      return "processing";
+    case "completed":
+      return "success";
+    case "failed":
+      return "error";
+    default:
+      // Unknown state: treat as still in flight so the polling loop keeps
+      // trying rather than terminating with a misleading "success".
+      return "processing";
+  }
+}
+
+/**
  * Fetch the current status of a single job from `GET /v1/jobs/{job_id}`.
  * Uses a JWT minted (and cached) by the SDK.
+ *
+ * Known limitation: kc-tenants-service currently returns `signed_url: null`
+ * for every file because no code path populates that column (tracked as T42
+ * in the project TODO). When the file is `completed`, this function returns
+ * `processed_image_url: undefined` so the UI can surface the limitation
+ * instead of linking the user to an empty href.
  */
 export async function getJobStatus(jobId: string, fileId: string, _token: string): Promise<JobResult> {
   if (!_clientKey || !_client) {
@@ -281,7 +311,7 @@ export async function getJobStatus(jobId: string, fileId: string, _token: string
   };
   const file = data.files.find((f) => f.file_id === fileId) ?? data.files[0];
   return {
-    status: file.status as JobResult["status"],
+    status: mapApiStatus(file.status),
     processed_image_url: file.signed_url ?? undefined,
     error: file.error_message,
   };

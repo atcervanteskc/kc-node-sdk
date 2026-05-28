@@ -206,6 +206,19 @@ export function FileList({ entries, isProcessing, onRemove, onClear, onCheckStat
                   </a>
                 )}
 
+                {/* Processed-but-no-URL — explains why download is absent */}
+                {entry.status === "success" && !entry.resultUrl && (
+                  <span
+                    className="
+                      inline-flex items-center gap-1 rounded-lg border border-warning/30
+                      bg-warning/10 px-2.5 py-1 text-xs font-medium text-warning
+                    "
+                    title="kc-tenants-service returns signed_url: null until T42 is implemented (the GET /v1/jobs/{job_id} handler does not yet mint a fresh signed download URL). The image is processed and stored in GCS; webhook delivery carries the signed URL."
+                  >
+                    Processed (no URL via API yet)
+                  </span>
+                )}
+
                 {/* Remove — only for staged files and when not processing */}
                 {entry.status === "staged" && !isProcessing && (
                   <button
