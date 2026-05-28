@@ -85,8 +85,13 @@ export class ApiError extends Error {
 // One client per (apiKey, basePath) tuple. Recreated transparently when the
 // api key changes. The SDK handles token cache + refresh + 401 retry, so we
 // don't repeat any of that here.
+//
+// BASE_URL is empty so all requests are same-origin relative paths. In dev,
+// Vite (see vite.config.ts) proxies /v1 to the real KeepChill gateway so the
+// browser never has to negotiate CORS with api.keepchill.io. In production,
+// deploy this app behind a reverse proxy that forwards /v1 the same way.
 
-const BASE_URL = "https://api.keepchill.io";
+const BASE_URL = "";
 
 let _client: KeepChillClient | null = null;
 let _clientKey: string | null = null;
