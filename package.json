@@ -1,6 +1,6 @@
 {
   "name": "@keepchill/node-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Official Node.js SDK for the KeepChill watermark API.",
   "type": "module",
   "main": "./dist/src/index.js",

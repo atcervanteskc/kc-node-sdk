@@ -44,10 +44,8 @@ jobs:
           fi
           echo "Publishing version $PKG_VERSION"
 
-      - name: Publish to npm
+      - name: Publish to npm (via Trusted Publishing / OIDC)
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
