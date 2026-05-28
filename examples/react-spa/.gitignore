@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Local env files — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Editor / OS artefacts
+.DS_Store
+*.local
+.vscode/

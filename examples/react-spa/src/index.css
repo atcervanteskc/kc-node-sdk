@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── KeepChill Design Tokens — Dark Mode ──────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* Backgrounds — deep navy */
+    --background:        222 45% 5%;
+    --card:              222 38% 8%;
+
+    /* Text */
+    --foreground:        210 40% 96%;
+
+    /* Borders & inputs */
+    --border:            217 32% 17%;
+    --input:             217 32% 17%;
+
+    /* Muted surfaces */
+    --muted:             217 28% 12%;
+    --muted-foreground:  215 18% 52%;
+
+    /* Teal — KeepChill primary accent (#00E6D2) */
+    --accent:            174 100% 45%;
+    --accent-foreground: 222 84% 5%;
+
+    /* Semantic */
+    --destructive: 0 80% 68%;
+    --success:     142 70% 45%;
+    --warning:     45  93% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* Thin scrollbar to match the KC dashboard */
+  ::-webkit-scrollbar           { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track     { background: transparent; }
+  ::-webkit-scrollbar-thumb     { @apply bg-border rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground; }
+}

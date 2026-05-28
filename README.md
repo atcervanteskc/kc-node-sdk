@@ -16,6 +16,12 @@ Official Node.js SDK for the [KeepChill](https://keepchill.io) watermark API.
 npm install @keepchill/node-sdk
 ```
 
+## Examples
+
+See **[examples/](./examples)** for runnable apps that consume this SDK:
+
+- **[`examples/react-spa`](./examples/react-spa)** — Vite + React + TypeScript single-page app demonstrating the full upload flow end-to-end.
+
 ## Quick start
 
 ```ts
