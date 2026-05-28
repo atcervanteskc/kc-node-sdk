@@ -27,6 +27,7 @@ import {
   KeepChillClient,
   KeepChillError,
   ResponseError,
+  type SignedUrlsRequestFile,
 } from "@keepchill/node-sdk";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -184,13 +185,20 @@ export async function requestSignedUrls(
     throw new ApiError(0, "client_error", "API client not initialised — call getToken first");
   }
   try {
+    // Note: the explicit return type on `.map` is load-bearing. Without it,
+    // TS infers a wider literal type and silently allows a misspelled key
+    // (e.g. `"watermark-type"` with a dash) — the SDK then serializes
+    // watermark_type=undefined and url-signer falls back to "default", which
+    // image-worker rejects with 422 downstream. Keep the annotation.
     const resp = await _client.watermarks.createSignedUploadUrls({
       signedUrlsRequest: {
-        files: files.map((f) => ({
-          name: f.name,
-          type: f.type as "image/jpeg" | "image/png" | "image/webp",
-          "watermark-type": f.watermark_type,
-        })),
+        files: files.map(
+          (f): SignedUrlsRequestFile => ({
+            name: f.name,
+            type: f.type as SignedUrlsRequestFile["type"],
+            watermark_type: f.watermark_type,
+          }),
+        ),
       },
     });
     return (resp.uploads ?? []).map((u) => ({
