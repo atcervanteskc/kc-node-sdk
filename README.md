@@ -36,8 +36,8 @@ const client = new KeepChillClient({
 const batch = await client.watermarks.createSignedUploadUrls({
   signedUrlsRequest: {
     files: [
-      { name: "beach-01.jpg", type: "image/jpeg", "watermark-type": "photographer" },
-      { name: "beach-02.jpg", type: "image/jpeg", "watermark-type": "photographer" },
+      { name: "beach-01.jpg", type: "image/jpeg", watermark_type: "photographer" },
+      { name: "beach-02.jpg", type: "image/jpeg", watermark_type: "photographer" },
     ],
   },
 });
@@ -60,6 +60,46 @@ job/file read endpoints ship in the SDK, poll job status via your own `fetch`
 to `GET /v1/jobs/{job_id}` using the JWT returned by `client.auth.createAccessToken()`,
 or — preferred — configure a `webhook_url` on the request and let the API
 notify you on completion.
+
+## Watermark presets & config
+
+Each file takes a coarse `watermark_type` (`"photographer"` for a visibly
+watermarked preview, `"creator"` for a clean invisible-only render) plus an
+optional, fully-typed `config` object that carries the V3 protection profile
+and attribution. Per-file `config` overrides any job-level `config`; unknown
+fields are ignored, so the object is forward-compatible.
+
+```ts
+const batch = await client.watermarks.createSignedUploadUrls({
+  signedUrlsRequest: {
+    files: [
+      {
+        name: "fight-night-01.jpg",
+        type: "image/jpeg",
+        watermark_type: "photographer",
+        config: {
+          // Business-intent preset (recommended). Selects the protection profile.
+          preset: "photographer_marketplace",
+          creator_name: "Jane Doe Photography",
+          studio_name: "JD Studio",            // visible banner text
+          event_name: "Spring Open 2026",
+          // Marketplace presets default to "Keep Chill App"; override for partners:
+          distribution_source_name: "Getty Images",
+          distribution_source_type: "partner",
+          listing_url: "https://www.gettyimages.com/detail/123",
+        },
+      },
+    ],
+  },
+});
+```
+
+**`config.preset`** — business-intent presets (recommended):
+`photographer_marketplace`, `creator_marketplace`, `photographer_protection`,
+`creator_protection`. Legacy technical presets are still accepted:
+`marketplace_friendly`, `sports_marketplace_default`, `balanced_protection`,
+`high_risk_event`. For creator presets use `creator_brand` instead of
+`studio_name`/event fields.
 
 ## Authentication model
 

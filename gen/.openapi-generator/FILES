@@ -39,6 +39,8 @@ src/models/SubscriptionStatus.ts
 src/models/SubscriptionUsage.ts
 src/models/TenantProfile.ts
 src/models/TenantQuotas.ts
+src/models/WatermarkConfig.ts
+src/models/WatermarkPreset.ts
 src/models/WatermarkType.ts
 src/models/index.ts
 src/runtime.ts

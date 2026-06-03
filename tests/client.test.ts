@@ -103,6 +103,57 @@ describe("KeepChillClient", () => {
     }
   });
 
+  it("serializes the per-file watermark config (preset + distribution source) into the request body", async () => {
+    const { impl, calls } = mockFetch((call) => {
+      if (call.url.endsWith("/v1/auth/token")) {
+        return jsonResponse(200, {
+          access_token: "jwt-1",
+          token_type: "Bearer",
+          expires_in: 3600,
+        });
+      }
+      if (call.url.endsWith("/v1/watermarks/signed-urls")) {
+        return signedUrlsOk();
+      }
+      return jsonResponse(404, { error: "unexpected" });
+    });
+
+    const client = new KeepChillClient({
+      apiKey: "sk_live_test",
+      fetch: impl as unknown as typeof fetch,
+    });
+
+    await client.watermarks.createSignedUploadUrls({
+      signedUrlsRequest: {
+        files: [
+          {
+            name: "beach-01.jpg",
+            type: "image/jpeg",
+            watermark_type: "photographer",
+            config: {
+              preset: "photographer_marketplace",
+              creator_name: "Jane Doe",
+              studio_name: "JD Studio",
+              distribution_source_name: "Keep Chill App",
+              distribution_source_type: "marketplace",
+            },
+          },
+        ],
+      },
+    });
+
+    const signedCall = calls.find((c) => c.url.endsWith("/v1/watermarks/signed-urls"));
+    const body = JSON.parse(signedCall!.init!.body as string);
+    const file = body.files[0];
+    // watermark_type is serialized under the hyphenated key the gateway expects.
+    expect(file["watermark-type"]).toBe("photographer");
+    expect(file.config.preset).toBe("photographer_marketplace");
+    expect(file.config.creator_name).toBe("Jane Doe");
+    expect(file.config.studio_name).toBe("JD Studio");
+    expect(file.config.distribution_source_name).toBe("Keep Chill App");
+    expect(file.config.distribution_source_type).toBe("marketplace");
+  });
+
   it("re-mints when the cached token is past its leeway window", async () => {
     let mints = 0;
     const { impl } = mockFetch((call) => {

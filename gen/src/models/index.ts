@@ -28,4 +28,6 @@ export * from './SubscriptionStatus';
 export * from './SubscriptionUsage';
 export * from './TenantProfile';
 export * from './TenantQuotas';
+export * from './WatermarkConfig';
+export * from './WatermarkPreset';
 export * from './WatermarkType';
