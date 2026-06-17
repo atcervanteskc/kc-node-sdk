@@ -39,6 +39,14 @@ export interface WatermarkConfig {
      */
     preset?: WatermarkPreset;
     /**
+     * Public creator/photographer identity used for provenance binding in
+     * the manifest. Falls back to the tenant identity when omitted.
+     * 
+     * @type {string}
+     * @memberof WatermarkConfig
+     */
+    creator_id?: string;
+    /**
      * Photographer/creator display name embedded in the manifest.
      * @type {string}
      * @memberof WatermarkConfig
@@ -56,6 +64,26 @@ export interface WatermarkConfig {
      * @memberof WatermarkConfig
      */
     creator_brand?: string;
+    /**
+     * Public photographer catalog ID. Becomes the manifest PhotoID for
+     * photographer presets (falls back to content_id, then the internal asset id).
+     * 
+     * @type {string}
+     * @memberof WatermarkConfig
+     */
+    photo_id?: string;
+    /**
+     * Public creator content catalog ID (creator presets).
+     * @type {string}
+     * @memberof WatermarkConfig
+     */
+    content_id?: string;
+    /**
+     * Machine-readable event identifier for catalog correlation.
+     * @type {string}
+     * @memberof WatermarkConfig
+     */
+    event_id?: string;
     /**
      * Event or shoot name (photographer presets).
      * @type {string}
@@ -140,9 +168,13 @@ export function WatermarkConfigFromJSONTyped(json: any, ignoreDiscriminator: boo
         
             ...json,
         'preset': json['preset'] == null ? undefined : WatermarkPresetFromJSON(json['preset']),
+        'creator_id': json['creator_id'] == null ? undefined : json['creator_id'],
         'creator_name': json['creator_name'] == null ? undefined : json['creator_name'],
         'studio_name': json['studio_name'] == null ? undefined : json['studio_name'],
         'creator_brand': json['creator_brand'] == null ? undefined : json['creator_brand'],
+        'photo_id': json['photo_id'] == null ? undefined : json['photo_id'],
+        'content_id': json['content_id'] == null ? undefined : json['content_id'],
+        'event_id': json['event_id'] == null ? undefined : json['event_id'],
         'event_name': json['event_name'] == null ? undefined : json['event_name'],
         'event_date': json['event_date'] == null ? undefined : json['event_date'],
         'event_venue': json['event_venue'] == null ? undefined : json['event_venue'],
@@ -167,9 +199,13 @@ export function WatermarkConfigToJSONTyped(value?: WatermarkConfig | null, ignor
         
             ...value,
         'preset': WatermarkPresetToJSON(value['preset']),
+        'creator_id': value['creator_id'],
         'creator_name': value['creator_name'],
         'studio_name': value['studio_name'],
         'creator_brand': value['creator_brand'],
+        'photo_id': value['photo_id'],
+        'content_id': value['content_id'],
+        'event_id': value['event_id'],
         'event_name': value['event_name'],
         'event_date': value['event_date'],
         'event_venue': value['event_venue'],
