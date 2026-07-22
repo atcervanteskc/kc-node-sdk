@@ -14,14 +14,15 @@
 
 
 /**
- * 
+ * `stale` means the signed URL was issued but the upload never arrived within 30 minutes, so the reserved credit was refunded. The file will never be processed; request a new signed URL to retry.
  * @export
  */
 export const FileStatus = {
     pending: 'pending',
     processing: 'processing',
     completed: 'completed',
-    failed: 'failed'
+    failed: 'failed',
+    stale: 'stale'
 } as const;
 export type FileStatus = typeof FileStatus[keyof typeof FileStatus];
 

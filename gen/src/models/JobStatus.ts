@@ -14,13 +14,14 @@
 
 
 /**
- * 
+ * Terminal states are `completed`, `completed_with_errors`, and `failed`. A batch in which some files succeeded and others failed settles on `completed_with_errors` — treat it as partial success and inspect each entry in `files` to find which ones failed.
  * @export
  */
 export const JobStatus = {
     pending: 'pending',
     processing: 'processing',
     completed: 'completed',
+    completed_with_errors: 'completed_with_errors',
     failed: 'failed'
 } as const;
 export type JobStatus = typeof JobStatus[keyof typeof JobStatus];
